@@ -2,10 +2,13 @@ import "@a10n/blueprint-typespec";
 import "../task-relational-store/main.tsp";
 import "../../products/task-engine/features/task-lifecycle.tsp";
 
+using State;
+
 @component(#{ type: ComponentType.Service })
 namespace Components.TaskService {
   @reads([Components.TaskRelationalStore.TaskRow])
   @writes([Components.TaskRelationalStore.TaskRow])
+  @operation(#{})
   @testing(#{
     approach: TestingApproach.Real,
     reasoning: "Store writes are exercised directly — no mock needed.",
@@ -17,6 +20,7 @@ namespace Components.TaskService {
   )
   op create_task(title: string): { id: string };
 
+  @operation(#{})
   @projects(
     Products.TaskEngine.Features.TaskLifecycle.task_retrievable,
   )
