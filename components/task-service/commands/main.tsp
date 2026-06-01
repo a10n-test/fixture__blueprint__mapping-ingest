@@ -6,12 +6,16 @@ using State;
 
 namespace Components.TaskService.Commands {
   @writes([Components.TaskRelationalStore.TaskRow])
-  @projects(Products.TaskEngine.Features.TaskLifecycle.task_persisted)
+  @projects(
+    Products.TaskEngine.Features.TaskLifecycle.task_persisted,
+  )
   @operation(#{})
   op create_task(title: string): { id: string };
 
   @reads([Components.TaskRelationalStore.TaskRow])
-  @projects(Products.TaskEngine.Features.TaskLifecycle.task_retrievable)
+  @projects(
+    Products.TaskEngine.Features.TaskLifecycle.task_retrievable,
+  )
   @operation(#{})
   op get_task(id: string): { id: string; title: string; done: boolean };
 
