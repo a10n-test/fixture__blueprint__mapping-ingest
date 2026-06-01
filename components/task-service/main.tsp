@@ -4,6 +4,9 @@ import "../../products/task-engine/features/task-lifecycle.tsp";
 
 @component(#{ type: ComponentType.Service })
 namespace Components.TaskService {
+  @calls([get_task])
+  @reads([Components.TaskRelationalStore.TaskRow])
+  @writes([Components.TaskRelationalStore.TaskRow])
   @operation(#{})
   @projects(
     Products.TaskEngine.Features.TaskLifecycle.task_persisted,
