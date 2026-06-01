@@ -1,3 +1,19 @@
 linter:
   extends:
     - "@a10n/blueprint-typespec/recommended"
+  # operation-reachability is disabled ONLY on this fixture branch by design.
+  #
+  # `dep-call` models the spec state IMMEDIATELY BEFORE `a10n-blueprint mapping
+  # ingest` runs: the external dependency ops
+  #   Dependencies.Github.Components.ApiService.Http.get_repo
+  #   Dependencies.Acme.Components.AcmeSdk.Operations.fetch
+  # exist but are not yet reached by any first-party @calls. operation-reachability
+  # warns (dependencyOpUnreachable) on exactly that — but the reaching @calls edge
+  # is the very thing ingest WRITES (from the impl `:call` markers on the
+  # dep-call-marker branch). Pre-adding the @calls to satisfy the rule would make
+  # ingest a no-op and defeat the test that proves ingest emits the dep edge
+  # (T013_22). So this single rule is disabled here, and ONLY here, to model the
+  # legitimate pre-ingest state. Post-ingest the spec compiles clean with the rule
+  # ON (verified by T013_22's requireTSPCompiles). Every other rule stays enabled.
+  disable:
+    "@a10n/blueprint-typespec/operation-reachability": "pre-ingest fixture: dep ops are reached only after ingest writes their @calls (see T013_22); disabling avoids a chicken-and-egg dependencyOpUnreachable warning that ingest itself resolves"
