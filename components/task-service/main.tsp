@@ -5,7 +5,7 @@ using State;
 
 @component(#{ type: ComponentType.Service })
 namespace Components.TaskService {
-  @calls([delete_task])
+  @calls([update_task])
   @operation(#{})
   op create_task(title: string): { id: string };
 
