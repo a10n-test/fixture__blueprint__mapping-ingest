@@ -15,5 +15,6 @@ linter:
     # Fixture repo — edges are under test and may be intentionally absent on some branches.
     "@a10n/blueprint-typespec/op-missing-edge": "fixture: edges under test"
     "@a10n/blueprint-typespec/ui-action-missing-edge": "fixture: edges under test"
-    # Fixture repo — @calls cross-kind edge patterns are under test.
+    # Fixture repo — @calls cross-kind edge patterns are under test; @testing not required.
     "@a10n/blueprint-typespec/calls-invalid-caller-callee": "fixture: calls patterns under test"
+    "@a10n/blueprint-typespec/calls-graph": "fixture: @testing declarations omitted"
