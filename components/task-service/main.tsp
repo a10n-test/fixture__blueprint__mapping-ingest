@@ -4,6 +4,7 @@ import "../../products/task-engine/features/task-lifecycle.tsp";
 
 @component(#{ type: ComponentType.Service })
 namespace Components.TaskService {
+  @calls([delete_task])
   @operation(#{})
   @projects(
     Products.TaskEngine.Features.TaskLifecycle.task_persisted,
