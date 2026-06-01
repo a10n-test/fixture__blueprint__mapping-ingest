@@ -8,11 +8,6 @@ namespace Components.TaskService {
   @reads([Components.TaskRelationalStore.TaskRow])
   @writes([Components.TaskRelationalStore.TaskRow])
   @operation(#{})
-  @testing(#{
-    approach: TestingApproach.Real,
-    reasoning: "Store writes are exercised directly — no mock needed.",
-  })
-  @doc("Create a new task and persist it.")
   op create_task(title: string): { id: string };
 
   @operation(#{})
