@@ -6,7 +6,7 @@ using State;
 
 @testing(
   Components.TaskRelationalStore,
-  #{ approach: TestingApproach.Real, reasoning: "Exercise the real store so persistence and retrieval are covered end-to-end." }
+  #{ approach: TestingApproach.Real, reasoning: "Exercise the real store so task persistence and retrieval are covered end-to-end." }
 )
 @component(#{ type: ComponentType.Service })
 namespace Components.TaskService {}
