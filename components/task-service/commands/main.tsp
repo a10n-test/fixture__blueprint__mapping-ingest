@@ -6,11 +6,13 @@ using State;
 
 namespace Components.TaskService.Commands;
 
+@calls([update_task])
 @writes([Components.TaskRelationalStore.TaskRow])
 @projects(Products.TaskEngine.Features.TaskLifecycle.task_persisted)
 @operation(#{})
 op create_task(title: string): { id: string };
 
+@calls([update_task])
 @reads([Components.TaskRelationalStore.TaskRow])
 @projects(Products.TaskEngine.Features.TaskLifecycle.task_retrievable)
 @operation(#{})
