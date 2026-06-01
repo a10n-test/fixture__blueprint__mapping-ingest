@@ -2,13 +2,17 @@ import "@a10n/blueprint-typespec";
 import "../task-relational-store/main.tsp";
 import "../../products/task-engine/features/task-lifecycle.tsp";
 
+using State;
+
 @component(#{ type: ComponentType.Service })
 namespace Components.TaskService {
+  @operation(#{})
   @projects(
     Products.TaskEngine.Features.TaskLifecycle.task_persisted,
   )
   op create_task(title: string): { id: string };
 
+  @operation(#{})
   @projects(
     Products.TaskEngine.Features.TaskLifecycle.task_retrievable,
   )
