@@ -6,6 +6,7 @@ using State;
 
 namespace Components.TaskService.Commands;
 
+@calls([update_task])
 @reads([Components.TaskRelationalStore.TaskRow])
 @projects(Products.TaskEngine.Features.TaskLifecycle.task_retrievable)
 @operation(#{})

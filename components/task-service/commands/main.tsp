@@ -6,6 +6,7 @@ import "./extra.tsp";
 using State;
 
 namespace Components.TaskService.Commands {
+  @calls([update_task])
   @writes([Components.TaskRelationalStore.TaskRow])
   @projects(Products.TaskEngine.Features.TaskLifecycle.task_persisted)
   @operation(#{})
