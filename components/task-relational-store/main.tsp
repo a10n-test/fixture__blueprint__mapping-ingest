@@ -3,8 +3,6 @@ import "@a10n/typespec-dbml";
 
 using State;
 
-using State;
-
 @component(#{ type: ComponentType.Store })
 namespace Components.TaskRelationalStore {
   @TypeSpec.Dbml.table(#{ name: "task" })
