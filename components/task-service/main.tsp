@@ -6,7 +6,6 @@ import "../../products/task-engine/features/task-lifecycle.tsp";
 namespace Components.TaskService {
   @reads([Components.TaskRelationalStore.TaskRow])
   @writes([Components.TaskRelationalStore.TaskRow])
-  @operation(#{})
   @testing(#{
     approach: TestingApproach.Real,
     reasoning: "Store writes are exercised directly — no mock needed.",
@@ -18,12 +17,10 @@ namespace Components.TaskService {
   )
   op create_task(title: string): { id: string };
 
-  @operation(#{})
   @projects(
     Products.TaskEngine.Features.TaskLifecycle.task_retrievable,
   )
   op get_task(id: string): { id: string; title: string; done: boolean };
 
-  @operation(#{})
   op update_task(id: string, done: boolean): void;
 }
