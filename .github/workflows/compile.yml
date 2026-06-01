@@ -1,0 +1,70 @@
+name: Compile
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+env:
+  PROJECT_ID: horizon-37
+  REGISTRY_LOCATION: europe-west3
+  REPOSITORY: h37-agent-factory-dev-a10n-npm
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  compile:
+    name: TypeSpec compile
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: projects/202350853882/locations/global/workloadIdentityPools/h37-agent-factory-dev-gh/providers/gh-oidc
+          service_account: a10n-cli-ci@horizon-37.iam.gserviceaccount.com
+
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+
+      - name: Configure npm for Artifact Registry
+        run: |
+          gcloud artifacts print-settings npm \
+            --project="${{ env.PROJECT_ID }}" \
+            --location="${{ env.REGISTRY_LOCATION }}" \
+            --repository="${{ env.REPOSITORY }}" \
+            --scope="@a10n" >> ~/.npmrc
+          npx google-artifactregistry-auth --repo-config ~/.npmrc --credential-config ~/.npmrc
+
+      - name: Install dependencies
+        run: npm ci --userconfig ~/.npmrc
+
+      - name: Compile TypeSpec
+        run: |
+          set -o pipefail
+          npx tsp compile . 2>&1 | tee /tmp/tsp-output.txt
+          filtered=$(grep -v "@typespec/http/metadata-ignored" /tmp/tsp-output.txt \
+            | grep -v "node_modules/@typespec/http/lib/streams/main.tsp" \
+            | grep -v "node_modules/@typespec/sse/lib/types.tsp" \
+            | grep -v "header property will be ignored as it is inside of a @body" \
+            | grep -v "^Found [0-9]* warning" || true)
+          remaining=$(echo "$filtered" | grep -cE "warning" || true)
+          if [ "$remaining" -gt 0 ]; then
+            echo "=== Non-SSE warnings ==="
+            echo "$filtered" | grep -E "warning"
+            exit 1
+          fi
+
+      - name: Upload tsp output on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tsp-output
+          path: /tmp/tsp-output.txt

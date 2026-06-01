@@ -1,0 +1,14 @@
+linter:
+  extends:
+    - "@a10n/blueprint-typespec/recommended"
+  disable:
+    # Fixture repo — component interfaces are correct but tests are intentionally omitted.
+    # Disable rules that require test-case coverage or prose assertions.
+    "@a10n/blueprint-typespec/operation-reachability": "fixture: no tests"
+    "@a10n/blueprint-typespec/test-case-peer-boundary": "fixture: no tests"
+    "@a10n/blueprint-typespec/test-case-authoring": "fixture: no tests"
+    "@a10n/blueprint-typespec/worker-type-spec": "fixture: no tests"
+    "@a10n/blueprint-typespec/event-call-graph": "fixture: no tests"
+    "@a10n/blueprint-typespec/store-model-coverage": "fixture: no tests"
+    "@a10n/blueprint-typespec/invariant-missing-proof": "fixture: no invariant proofs"
+    "@a10n/blueprint-typespec/proof-missing-projects": "fixture: no invariant proofs"

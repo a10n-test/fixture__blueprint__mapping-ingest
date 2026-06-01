@@ -1,0 +1,102 @@
+name: Upgrade @a10n packages
+
+on:
+  workflow_dispatch:
+
+env:
+  PROJECT_ID: horizon-37
+  REGISTRY_LOCATION: europe-west3
+  REPOSITORY: h37-agent-factory-dev-a10n-npm
+
+permissions:
+  contents: write
+  id-token: write
+  actions: write
+
+jobs:
+  upgrade:
+    name: Upgrade @a10n/* to latest and propagate to all branches
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: projects/202350853882/locations/global/workloadIdentityPools/h37-agent-factory-dev-gh/providers/gh-oidc
+          service_account: a10n-cli-ci@horizon-37.iam.gserviceaccount.com
+
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+
+      - name: Configure npm for Artifact Registry
+        run: |
+          gcloud artifacts print-settings npm \
+            --project="${{ env.PROJECT_ID }}" \
+            --location="${{ env.REGISTRY_LOCATION }}" \
+            --repository="${{ env.REPOSITORY }}" \
+            --scope="@a10n" >> ~/.npmrc
+          npx google-artifactregistry-auth --repo-config ~/.npmrc --credential-config ~/.npmrc
+
+      - name: Configure git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Upgrade @a10n/* packages to latest on main
+        run: |
+          git checkout main
+
+          # Collect all @a10n/* package names from devDependencies + dependencies
+          packages=$(node -e "
+            const pkg = JSON.parse(require('fs').readFileSync('package.json', 'utf8'));
+            const deps = { ...pkg.dependencies, ...pkg.devDependencies };
+            const a10n = Object.keys(deps).filter(k => k.startsWith('@a10n/'));
+            console.log(a10n.join(' '));
+          ")
+
+          echo "Upgrading: $packages"
+
+          npm install --userconfig ~/.npmrc $(echo $packages | tr ' ' '\n' | sed 's/$/@latest/' | tr '\n' ' ')
+
+          if git diff --quiet package.json package-lock.json; then
+            echo "No changes to @a10n packages — already at latest"
+          else
+            git add package.json package-lock.json
+            git commit -m "chore: upgrade @a10n packages to latest"
+            git push origin main
+          fi
+
+      - name: Merge main into all other branches
+        run: |
+          # Get all remote branches except main
+          branches=$(git branch -r | grep -v 'origin/main' | grep -v 'origin/HEAD' | sed 's|origin/||' | tr -d ' ')
+
+          for branch in $branches; do
+            echo "=== Merging main into $branch ==="
+            git checkout "$branch"
+            # -X theirs: on conflict prefer main's version (we want main's @a10n versions)
+            git merge main --no-edit -X theirs -m "chore: merge main (upgrade @a10n packages)"
+            git push origin "$branch"
+          done
+
+      - name: Back to main
+        run: git checkout main
+
+      - name: Trigger compile on main and all branches
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          repo="${{ github.repository }}"
+          branches=$(git branch -r | grep -v 'origin/HEAD' | sed 's|origin/||' | tr -d ' ')
+          for branch in $branches; do
+            echo "Triggering compile on $branch"
+            gh workflow run compile.yml --repo "$repo" --ref "$branch" || echo "Warning: could not trigger compile on $branch"
+          done
