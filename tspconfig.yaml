@@ -12,3 +12,6 @@ linter:
     "@a10n/blueprint-typespec/store-model-coverage": "fixture: no tests"
     "@a10n/blueprint-typespec/invariant-missing-proof": "fixture: no invariant proofs"
     "@a10n/blueprint-typespec/proof-missing-projects": "fixture: no invariant proofs"
+    # Fixture repo — edges are under test and may be intentionally absent on some branches.
+    "@a10n/blueprint-typespec/op-missing-edge": "fixture: edges under test"
+    "@a10n/blueprint-typespec/ui-action-missing-edge": "fixture: edges under test"
