@@ -1,6 +1,8 @@
 import "@a10n/blueprint-typespec";
 import "../../task-relational-store/main.tsp";
 import "../../../products/task-engine/features/task-lifecycle.tsp";
+import "../../../dependencies/github/main.tsp";
+import "../../../dependencies/acme/main.tsp";
 
 using State;
 

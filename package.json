@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "devDependencies": {
-    "@a10n/blueprint-typespec": "^0.0.0-20260601-502b70b",
+    "@a10n/blueprint-typespec": "^0.0.0-20260601-16d44ca",
     "@a10n/typespec-dbml": "^0.0.0-20260526-136a0e0",
     "@typespec/compiler": "1.11.0",
     "@typespec/events": "0.81.0",
