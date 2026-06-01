@@ -5,7 +5,6 @@ using State;
 
 @component(#{ type: ComponentType.Service })
 namespace Components.TaskService {
-  #suppress "@a10n/blueprint-typespec/calls-invalid-caller-callee" "fixture: stale @calls edge is under test"
   @calls([update_task])
   @operation(#{})
   op create_task(title: string): { id: string };
