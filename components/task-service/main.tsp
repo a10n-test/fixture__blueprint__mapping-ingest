@@ -1,6 +1,5 @@
 import "@a10n/blueprint-typespec";
 import "../task-relational-store/main.tsp";
-import "../../products/task-engine/features/task-lifecycle.tsp";
 
 using State;
 
@@ -14,17 +13,11 @@ namespace Components.TaskService {
     reasoning: "Store writes are exercised directly — no mock needed.",
   })
   @doc("Create a new task and persist it.")
-  #suppress "@a10n/blueprint-typespec/op-invariant-cap" "single op covers multiple lifecycle invariants"
-  @projects(
-    Products.TaskEngine.Features.TaskLifecycle.task_persisted,
-  )
   op create_task(title: string): { id: string };
 
   @operation(#{})
-  @projects(
-    Products.TaskEngine.Features.TaskLifecycle.task_retrievable,
-  )
   op get_task(id: string): { id: string; title: string; done: boolean };
 
+  @operation(#{})
   op update_task(id: string, done: boolean): void;
 }
