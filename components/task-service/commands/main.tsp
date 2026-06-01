@@ -1,0 +1,19 @@
+import "@a10n/blueprint-typespec";
+import "../../task-relational-store/main.tsp";
+
+using State;
+
+namespace Components.TaskService.Commands {
+  @reads([Components.TaskRelationalStore.TaskRow])
+  @writes([Components.TaskRelationalStore.TaskRow])
+  @operation(#{})
+  op create_task(title: string): { id: string };
+
+  @reads([Components.TaskRelationalStore.TaskRow])
+  @operation(#{})
+  op get_task(id: string): { id: string; title: string; done: boolean };
+
+  @writes([Components.TaskRelationalStore.TaskRow])
+  @operation(#{})
+  op update_task(id: string, done: boolean): void;
+}
