@@ -4,7 +4,15 @@ import "../../products/task-engine/features/task-lifecycle.tsp";
 
 @component(#{ type: ComponentType.Service })
 namespace Components.TaskService {
+  @reads([Components.TaskRelationalStore.TaskRow])
+  @writes([Components.TaskRelationalStore.TaskRow])
   @operation(#{})
+  @testing(#{
+    approach: TestingApproach.Real,
+    reasoning: "Store writes are exercised directly — no mock needed.",
+  })
+  @doc("Create a new task and persist it.")
+  #suppress "@a10n/blueprint-typespec/op-invariant-cap" "single op covers multiple lifecycle invariants"
   @projects(
     Products.TaskEngine.Features.TaskLifecycle.task_persisted,
   )
