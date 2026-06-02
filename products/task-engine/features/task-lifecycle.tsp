@@ -8,4 +8,7 @@ namespace Products.TaskEngine.Features.TaskLifecycle {
 
   @invariant(#{ predicate: "A task can be retrieved by ID.", why: "Read correctness." })
   op task_retrievable(): void;
+
+  @invariant(#{ predicate: "An audit entry is recorded for each created task.", why: "Traceability." })
+  op audit_recorded(): void;
 }
