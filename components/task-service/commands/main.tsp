@@ -7,7 +7,6 @@ using State;
 namespace Components.TaskService.Commands {
   @doc("Creates a new task and emits \\{@TaskEvents.created}.")
   @writes([Components.TaskRelationalStore.TaskRow])
-  @projects(Products.TaskEngine.Features.TaskLifecycle.task_persisted)
   @operation(#{})
   op create_task(title: string): { id: string };
 
@@ -16,7 +15,6 @@ namespace Components.TaskService.Commands {
   @operation(#{})
   op get_task(id: string): { id: string; title: string; done: boolean };
 
-  @reads([Components.TaskRelationalStore.TaskRow])
   @writes([Components.TaskRelationalStore.TaskRow])
   @operation(#{})
   op update_task(id: string, done: boolean): void;
