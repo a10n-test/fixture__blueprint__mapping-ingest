@@ -39,8 +39,8 @@ namespace Graph {
   @node
   @calls([
     Components.BlobstoreSdk.Operations.read_object,
-    Components.BlobstoreSdk.Operations.list_objects,
     Components.BlobstoreSdk.Operations.archive_object,
+    Components.BlobstoreSdk.Operations.list_objects,
     Graph.classify,
   ])
   op snapshot(state: Graph.State): Command<{}, End>;
