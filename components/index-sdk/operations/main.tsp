@@ -12,6 +12,7 @@ namespace Components.IndexSdk.Operations {
   // those leak up to the create_task consumer that invokes it. (Decorator tokens
   // omitted from this comment so the e2e Contains assertions match the rendered
   // decorators, not this prose.)
+  @doc("Syncs a task into the search index, emitting \\{@IndexEvents.synced} on success.")
   @operation(#{})
   op sync_index(id: string): void;
 }

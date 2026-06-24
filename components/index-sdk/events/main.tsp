@@ -4,6 +4,7 @@ import "@typespec/events";
 using State;
 using TypeSpec.Events;
 
+#suppress "@a10n/blueprint-typespec/namespace-path" "test fixture: IndexSdk publishes events; real SDKs that emit events would be restructured as services"
 namespace Components.IndexSdk.Events;
 
 model TaskSynced {
