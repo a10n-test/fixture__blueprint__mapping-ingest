@@ -41,6 +41,7 @@ namespace Graph {
     Components.BlobstoreSdk.Operations.read_object,
     Components.BlobstoreSdk.Operations.list_objects,
     Components.BlobstoreSdk.Operations.archive_object,
+    Graph.classify,
   ])
   op snapshot(state: Graph.State): Command<{}, End>;
 

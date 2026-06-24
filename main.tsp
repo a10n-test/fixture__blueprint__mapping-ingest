@@ -5,3 +5,4 @@ import "./components/task-relational-store/main.tsp";
 import "./components/snapshot-agent/main.tsp";
 import "./components/blobstore-sdk/main.tsp";
 import "./components/meta-relational-store/main.tsp";
+import "./components/snapshot-file-store/main.tsp";
