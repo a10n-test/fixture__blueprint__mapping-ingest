@@ -5,6 +5,7 @@ import "../../../products/task-engine/features/task-lifecycle.tsp";
 using State;
 
 namespace Components.TaskService.Commands {
+  @doc("Creates a new task and emits TaskEvents.created.")
   @writes([Components.TaskRelationalStore.TaskRow])
   @projects(Products.TaskEngine.Features.TaskLifecycle.task_persisted)
   @operation(#{})
